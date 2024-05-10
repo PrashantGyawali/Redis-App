@@ -1,0 +1,13 @@
+<%
+let stars =new Array(Math.max(0,Math.floor(rating))).fill(1);
+for (let i = 0; stars.length < 5; i++) {
+    stars.push(0);
+}
+%>
+
+<div style="color:rgb(235, 223, 0); -webkit-text-stroke: 0.5px rgb(189, 173, 0);">
+    <% stars.forEach((n, i) => { %>
+        <%= n === 1 ? '★' : '☆' %>
+    <% }); %> 
+</div>
+<%= rating.toString().slice(0,4) %>
