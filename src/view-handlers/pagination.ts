@@ -8,9 +8,9 @@ function PageGenerator(currentPage:number,lastPage:number,search:string,cache:st
     if(lastPage<=noOfPagesToShow)
     {   for(let i=1;i<=lastPage;i++)
         {
-            pagesElements.push(`<a href="/books?search=${search}&page=${Math.round(i)}&cahce=${cache}" class="pageNumber">${i}</a>`);
+            pagesElements.push(`<a href="/books?search=${search.split(" ").join("+")}&page=${Math.round(i)}&cache=${cache}" class="pageNumber ${ i==1 && "firstPageNumber"} ${i==lastPage && "lastPageNumber"} ${i==currentPage && "selected"}">${i}</a>`);
         }
-        return pagesElements;
+        return pagesElements.join("\n");
     }
 
     for(let i=1;i<=lastPage;i++)
@@ -60,7 +60,7 @@ function PageGenerator(currentPage:number,lastPage:number,search:string,cache:st
     
 
     pages.sort((a,b)=>a-b).forEach((i,index)=>pagesElements.push(
-        `<a href="/books?search=${search}&page=${Math.round(i)}&cache=${cache}" class="pageNumber ${ i==1 && "firstPageNumber"} ${i==lastPage && "lastPageNumber"} ${i==currentPage && "selected"}">${Math.round(i)!=i?"...":i}</a>`
+        `<a href="/books?search=${search.split(" ").join("+")}&page=${Math.round(i)}&cache=${cache}" class="pageNumber ${ i==1 && "firstPageNumber"} ${i==lastPage && "lastPageNumber"} ${i==currentPage && "selected"}">${Math.round(i)!=i?"...":i}</a>`
     ));
     return pagesElements.join("\n");
 }
