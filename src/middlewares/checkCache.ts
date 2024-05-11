@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import redisClient from '../services/redisClient';
+import RedisClient from '../services/redisClient.js';
 
 
 async function checkCache(req:Request,res:Response,next:NextFunction){
@@ -20,7 +20,7 @@ async function checkCache(req:Request,res:Response,next:NextFunction){
     res.locals.cache=true;
     res.locals.currentPage=page;
 
-    const cacheValue = await redisClient.get(`books:${query || ""}:page:${page}`);
+    const cacheValue = await RedisClient().get(`books:${query || ""}:page:${page}`);
     if (cacheValue) {
         console.log("Cache hit");
         res.locals.data=JSON.parse(cacheValue);

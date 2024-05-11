@@ -1,5 +1,5 @@
 import { Request,Response,NextFunction } from "express";
-import redisClient from "../services/redisClient";
+import RedisClient from "../services/redisClient.js";
 
 function userRateLimit(maxRequests:number,timePeriod:number) {
     return async function(req:Request,res:Response,next:NextFunction)
@@ -22,9 +22,9 @@ function userRateLimit(maxRequests:number,timePeriod:number) {
         let requests: number;
 
 
-        requests = await redisClient.incr(key);
+        requests = await RedisClient().incr(key);
         if (requests === 1) {
-            await redisClient.expire(key, timePeriod);
+            await RedisClient().expire(key, timePeriod);
         }
 
 
@@ -34,9 +34,9 @@ function userRateLimit(maxRequests:number,timePeriod:number) {
         }
 
 
-        let ttl=await redisClient.ttl(key);
+        let ttl=await RedisClient().ttl(key);
         if(ttl<0){
-            await redisClient.pipeline().del(key).incr(key).expire(key,timePeriod).exec();
+            await RedisClient().pipeline().del(key).incr(key).expire(key,timePeriod).exec();
             ttl=timePeriod
         }
         return next();

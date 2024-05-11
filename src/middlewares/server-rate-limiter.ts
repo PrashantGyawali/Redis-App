@@ -1,4 +1,4 @@
-import redisClient from "../services/redisClient";
+import RedisClient from "../services/redisClient.js";
 import { Request, Response, NextFunction } from "express";
 
 export default async function serverRateLimiter(req:Request,res:Response,next:NextFunction) {
@@ -8,9 +8,9 @@ export default async function serverRateLimiter(req:Request,res:Response,next:Ne
         return next();
     };
 
-    let totalRequests=await redisClient.get("rateLimiter:server");
+    let totalRequests=await RedisClient().get("rateLimiter:server");
     if(!totalRequests){
-        await redisClient.setex("rateLimiter:server",86400,1);
+        await RedisClient().setex("rateLimiter:server",86400,1);
     }
     else{
         if(parseInt(totalRequests)>100)
@@ -19,7 +19,7 @@ export default async function serverRateLimiter(req:Request,res:Response,next:Ne
                 res.locals.ratelimitedType="server";
             }
             else{
-                redisClient.incr("rateLimiter:server");
+                RedisClient().incr("rateLimiter:server");
             }
             return next();
     }
