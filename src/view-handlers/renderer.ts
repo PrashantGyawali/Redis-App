@@ -2,12 +2,6 @@ import ejs from 'ejs';
 import PageGenerator from './pagination.js';
 import { Request, Response} from 'express';
 
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 function renderer(req:Request,res:Response){
     if(res.locals.ratelimited==true || res.locals.error)
     {
@@ -21,7 +15,7 @@ function renderer(req:Request,res:Response){
         }
 
         try {
-            ejs.renderFile(path.join(path.dirname(__dirname),"/views/Ratelimit.ejs"), {message:message,errorCode:errorCode}, (err, html) => {
+            ejs.renderFile("./src/views/RateLimit.ejs", {message:message,errorCode:errorCode}, (err, html) => {
                 if (err) {
                     // Handle error
                     console.error(err);
