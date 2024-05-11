@@ -4,8 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/public/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.svg">
     <title>Redis Book Search</title>
+
+    <meta name="description" content="Redis powered book search with ratelimiting and serverside caching to speed up requests">
+    <meta name="keywords" content="redis, caching, ratelimiting">
+    <meta name="author" content="PG">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://redis-book-search.onrender.com/">
+
     <style>
         /* Add your CSS styles here */
         .book img {
@@ -390,7 +397,7 @@
     <% books.results.forEach(book=> { %>
         <div class="bookInfo">
             <div class="bookCoverContainer">
-                <img src="<%= book.imageId ? 'https://covers.openlibrary.org/b/id/' + book.imageId + '-M.jpg' : './public/bookCover.png' %>"
+                <img src="<%= book.imageId ? 'https://covers.openlibrary.org/b/id/' + book.imageId + '-M.jpg' : './bookCover.webp' %>"
                     alt="Book Cover" loading="lazy" class="bookCover">
             </div>
             <div class="bookInfoSection">

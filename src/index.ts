@@ -15,7 +15,7 @@ app.use(urlencoded({extended:true}));
 app.use(json());
 app.use(cors({origin:["http://localhost:3000"]}));
 app.set('trust proxy', true);
-app.use('/public', express.static('public'))
+app.use(express.static('public',{maxAge:86400000,immutable:true}));
 app.set('view engine', 'ejs');
 
 app.get("/books",checkCache,serverRateLimiter,userRateLimit(15,3600),bookController,renderer);
