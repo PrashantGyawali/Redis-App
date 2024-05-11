@@ -13,13 +13,16 @@ const app=express();
 
 app.use(urlencoded({extended:true}));
 app.use(json());
-app.use(cors({origin:["http://localhost:3000",process.env.FRONTEND_URL||"http://localhost:5173"]}));
+app.use(cors({origin:["http://localhost:3000"]}));
 app.set('trust proxy', true);
 app.use('/public', express.static('public'))
 app.set('view engine', 'ejs');
 
 app.get("/books",checkCache,serverRateLimiter,userRateLimit(15,3600),bookController,renderer);
 
+app.get("/*",(req,res)=>{
+    res.redirect("/books?search=Harry+Potter&cache=true");
+});
 
 app.listen(process.env.PORT || 3000,()=>{
     console.log("Server started");
