@@ -21,11 +21,22 @@ async function bookController(req:Request,res:Response,next:NextFunction) {
         res.locals.currentPage=page;
     
         let itemsPerPage = 15;
-        let result=await fetch("https://openlibrary.org/search.json?title="+query+"&limit="+itemsPerPage+"&page="+page);
+
+        let baseURL="https://openlibrary.org/search.json?";
+        const searchParams: Record<string, any> = new URLSearchParams();
+        searchParams.set("title", query || "");
+        searchParams.set("limit", itemsPerPage.toString());
+        searchParams.set("page", page.toString());
+
+        const finalURL = new URL(baseURL);
+        finalURL.search = searchParams.toString();
+
+        let result=await fetch(finalURL.toString());
         let resultJson=await result.json();
-    
         let response= await resultJson.docs;
-        let lastPage= Math.ceil(resultJson.numFound/10);
+
+        let lastPage= Math.ceil(resultJson.numFound/itemsPerPage);
+
         let minifiedResponse= await response.map((x:Book)=> {
             return {
                 title: x.title,
@@ -37,7 +48,6 @@ async function bookController(req:Request,res:Response,next:NextFunction) {
                 imageId:x.cover_i
             };
         }); 
-    
         let finalResponse={"results":minifiedResponse,"lastPage":lastPage>200?200:lastPage};
         RedisClient().setex(`books:${query || ""}:page:${page}`,86400, JSON.stringify(finalResponse));
         res.locals.data=finalResponse;
