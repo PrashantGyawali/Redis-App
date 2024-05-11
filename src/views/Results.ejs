@@ -410,11 +410,12 @@
                             Rating: <%- include("./Stars.ejs",{rating:book.rating||0}) %>
                         </div>
                     </div>
-                    
-
                 </div>
             </div>
         <% }); %>
+
+
+        <%-!books.results.length ? "<h2 style='text-align:center'>No books found</h2>" : "" %>
 
     <div class="pagination">
         <%- pagination(currentPage,books.lastPage,query,cache) %>
